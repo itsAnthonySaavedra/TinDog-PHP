@@ -21,7 +21,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     />
-    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
   </head>
   <body class="gradient-background d-flex flex-column min-vh-100">
     <header class="py-3 text-center">
@@ -35,15 +35,27 @@
     <main class="d-flex align-items-center justify-content-center flex-grow-1">
       <div class="tindog-card text-center" style="max-width: 450px">
         <h2 class="h3 mb-4">Create an Account</h2>
-        <form id="register-form" novalidate>
+        <form id="register-form" action="process/register_process.php" method="POST" novalidate>
           <div class="mb-3 text-start">
             <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstName" required />
+            <input
+              type="text"
+              class="form-control"
+              id="firstName"
+              name="firstName"
+              required
+            />
             <div class="invalid-feedback">First name is required.</div>
           </div>
           <div class="mb-3 text-start">
             <label for="email" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="email" required />
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              required
+            />
             <div class="invalid-feedback">Please enter a valid email.</div>
           </div>
           <div class="mb-3 text-start">
@@ -52,10 +64,15 @@
               type="password"
               class="form-control"
               id="password"
+              name="password"
               minlength="8"
               required
               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
             />
+            <div class="invalid-feedback">
+              Must contain at least one number, one uppercase and one lowercase
+              letter, and be at least 8 characters long.
+            </div>
             <div class="invalid-feedback">
               Must contain at least one number, one uppercase and one lowercase
               letter, and be at least 8 characters long.
@@ -95,7 +112,7 @@
           <div class="text-center mt-3">
             <p>
               Already have an account?
-              <a href="/auth/index.php">Login here</a>
+              <a href="../auth/index.php">Login here</a>
             </p>
           </div>
         </form>
@@ -131,8 +148,8 @@
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/js/auth/form-validator.js"></script>
-    <script src="/assets/js/auth/registration.js"></script>
-    <script src="/assets/js/utils/initializer.js"></script>
+    <script src="../assets/js/auth/form-validator.js"></script>
+    <script src="../assets/js/auth/registration.js"></script>
+    <script src="../assets/js/utils/initializer.js"></script>
   </body>
 </html>
