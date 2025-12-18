@@ -41,16 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
     setVal("dogPersonalities", user.dog_personalities);
 
     // Owner Info
-    // Split name if needed, or just use what we have
-    // Assuming user.name is "First Last"
-    const nameParts = (user.name || "").split(" ");
-    const firstName = nameParts[0] || "";
-    const lastName = nameParts.slice(1).join(" ") || "";
-
-    setVal("ownerFirstName", firstName);
-    setVal("ownerLastName", lastName);
+    setVal("ownerFirstName", user.first_name || "");
+    setVal("ownerLastName", user.last_name || "");
     setVal("ownerLocation", user.location);
-    setVal("ownerBio", user.owner_bio);
+    // Fallback to generic bio if specific owner_bio is missing (API consistency)
+    setVal("ownerBio", user.owner_bio || user.bio);
   };
 
   // 2. Handle Submit
@@ -65,7 +60,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const userId = sessionStorage.getItem("loggedInUserId");
       if (!userId) {
-        alert("User ID not found. Please log in again.");
+        Toast.error("User ID not found. Please log in again.");
+        return;
+      }
+
+      // Helper to read file as Base64
+      const toBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+
+      // Get File Inputs
+      const dogAvatarFile = document.getElementById("dogAvatar").files[0];
+      const dogCoverFile = document.getElementById("dogCoverPhoto").files[0];
+      const ownerAvatarFile = document.getElementById("ownerAvatar").files[0];
+
+      let dogAvatarBase64 = null;
+      let dogCoverBase64 = null;
+      let ownerAvatarBase64 = null;
+
+      try {
+        if (dogAvatarFile) dogAvatarBase64 = await toBase64(dogAvatarFile);
+        if (dogCoverFile) dogCoverBase64 = await toBase64(dogCoverFile);
+        if (ownerAvatarFile) ownerAvatarBase64 = await toBase64(ownerAvatarFile);
+      } catch (e) {
+        console.error("Error converting images", e);
+        Toast.error("Error processing images.");
         return;
       }
 
@@ -83,6 +105,11 @@ document.addEventListener("DOMContentLoaded", () => {
         name: `${document.getElementById("ownerFirstName").value} ${document.getElementById("ownerLastName").value}`.trim(),
         location: document.getElementById("ownerLocation").value,
         owner_bio: document.getElementById("ownerBio").value,
+
+        // Images (only send if changed)
+        ...(dogAvatarBase64 && { dog_avatar: dogAvatarBase64 }),
+        ...(dogCoverBase64 && { dog_cover_photo: dogCoverBase64 }),
+        ...(ownerAvatarBase64 && { owner_avatar: ownerAvatarBase64 }),
       };
 
       try {
@@ -101,11 +128,11 @@ document.addEventListener("DOMContentLoaded", () => {
           window.location.href = "./index.html";
         } else {
           const err = await response.json();
-          alert("Failed to update profile: " + (err.message || "Unknown error"));
+          Toast.error("Failed to update profile: " + (err.message || "Unknown error"));
         }
       } catch (error) {
         console.error("Error updating profile:", error);
-        alert("An error occurred while saving.");
+        Toast.error("An error occurred while saving.");
       }
     });
   }

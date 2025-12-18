@@ -73,6 +73,14 @@
                       placeholder="Loves fetch, long walks..."></textarea>
                   </div>
                   <div class="mb-3">
+                    <label for="dogAvatar" class="form-label">Dog's Profile Picture</label>
+                    <input class="form-control" type="file" id="dogAvatar" accept="image/*">
+                  </div>
+                  <div class="mb-3">
+                    <label for="dogCoverPhoto" class="form-label">Cover Photo</label>
+                    <input class="form-control" type="file" id="dogCoverPhoto" accept="image/*">
+                  </div>
+                  <div class="mb-3">
                     <label for="dogPersonalities" class="form-label">Personalities (comma separated)</label>
                     <input type="text" class="form-control" id="dogPersonalities"
                       placeholder="Playful, Cuddly, Energetic" />
@@ -99,6 +107,10 @@
                     <textarea class="form-control" id="ownerBio" rows="4"
                       placeholder="A bit about yourself..."></textarea>
                   </div>
+                  <div class="mb-3">
+                    <label for="ownerAvatar" class="form-label">Your Profile Picture</label>
+                    <input class="form-control" type="file" id="ownerAvatar" accept="image/*">
+                  </div>
                 </div>
               </div>
               <hr />
@@ -121,7 +133,10 @@
   <script src="../../assets/js/app/header-handler.js"></script>
   <script src="../../assets/js/app/sidebar-handler.js"></script>
   <script src="../../assets/js/app/profile-handler.js"></script>
-  <script src="../../assets/js/utils/edit-form-loader.js"></script>
+  <script src="../../assets/js/app/profile-handler.js"></script>
+  <!-- <script src="../../assets/js/utils/edit-form-loader.js"></script> Removed: Conflicts with API loader -->
+  <script src="../../assets/js/utils/toast-service.js"></script>
+  <script src="../../assets/js/utils/toast-service.js"></script>
   <script src="../../assets/js/app/profile-edit-handler.js"></script>
 </body>
 

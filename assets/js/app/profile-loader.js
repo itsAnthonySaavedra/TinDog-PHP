@@ -243,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
           photoGallery.appendChild(newImgCol);
         } else {
           console.error("Failed to upload gallery photo");
-          alert("Failed to upload photo. Backend may not support this field.");
+          Toast.error("Failed to upload photo. Backend may not support this field.");
         }
       } catch (error) {
         console.error("Error uploading gallery photo:", error);
@@ -294,7 +294,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!response.ok) {
           console.error("Failed to update image");
-          alert("Failed to save image. Backend may not support this field.");
+          const errorData = await response.json().catch(() => ({}));
+          const errorMessage = errorData.message || "Failed to save image.";
+          Toast.error(errorMessage);
         } else {
           // If we updated 'avatar', update sidebar immediately
           if (fieldNames.includes('avatar')) {
@@ -313,41 +315,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setupEditButtons() {
     // Cover Edit
-    const coverBtn = document.querySelector('.edit-cover-btn');
-    if (coverBtn) {
-      let input = document.getElementById('cover-upload');
-      if (!input) {
-        input = document.createElement('input');
-        input.type = 'file';
-        input.id = 'cover-upload';
-        input.accept = 'image/*';
-        input.style.display = 'none';
-        input.onchange = handleCoverUpload;
-        document.body.appendChild(input);
-      }
+    const coverBtn = document.getElementById('edit-cover-btn');
+    const coverInput = document.getElementById('cover-photo-input');
+
+    if (coverBtn && coverInput) {
+      // Remove any existing listeners (clone node trick if needed, but here we just attach fresh)
+      // The button in HTML is just a button.
+      // We attach the click to open the file dialog
       coverBtn.onclick = (e) => {
-        e.preventDefault();
-        document.getElementById('cover-upload').click();
+        // e.preventDefault(); // Not needed for type=button
+        coverInput.click();
       };
+
+      // Handle file selection
+      coverInput.onchange = handleCoverUpload;
     }
 
     // Avatar Edit
-    const avatarBtn = document.querySelector('.edit-avatar-btn');
-    if (avatarBtn) {
-      let input = document.getElementById('avatar-upload');
-      if (!input) {
-        input = document.createElement('input');
-        input.type = 'file';
-        input.id = 'avatar-upload';
-        input.accept = 'image/*';
-        input.style.display = 'none';
-        input.onchange = handleAvatarUpload;
-        document.body.appendChild(input);
-      }
+    const avatarBtn = document.getElementById('edit-avatar-btn');
+    const avatarInput = document.getElementById('avatar-input');
+
+    if (avatarBtn && avatarInput) {
       avatarBtn.onclick = (e) => {
-        e.preventDefault();
-        document.getElementById('avatar-upload').click();
+        // e.preventDefault();
+        avatarInput.click();
       };
+      avatarInput.onchange = handleAvatarUpload;
     }
   }
 

@@ -62,13 +62,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const result = await response.json();
       if (result.success) {
-        alert("Settings saved successfully!");
+        Toast.success("Settings saved successfully!");
       } else {
-        alert("Failed to save settings.");
+        Toast.error("Failed to save settings.");
       }
     } catch (error) {
       console.error("Error saving settings:", error);
-      alert("An error occurred while saving.");
+      Toast.error("An error occurred while saving.");
     }
   };
 

@@ -6,6 +6,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = sessionStorage.getItem("userToken");
     if (!token) return;
 
+    if (matchesContainer) {
+      matchesContainer.innerHTML = `
+            <div class="col-12 text-center mt-5">
+                <div class="spinner-border text-danger" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2 text-muted">Finding your matches...</p>
+            </div>
+        `;
+    }
+
     try {
       const response = await fetch("http://127.0.0.1:8000/api/matches", {
         headers: {
@@ -59,13 +70,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const timeAgo = diffDays === 1 ? 'Today' : `${diffDays} days ago`;
 
       matchCard.innerHTML = `
-        <a href="../messages.html?user=${match.user.id}" class="text-decoration-none">
+        <a href="#" class="text-decoration-none" onclick="event.preventDefault(); window.ProfileModal.open('${match.user.id}', { mode: 'full' })">
           <div class="card h-100 match-card border-0 shadow-sm">
             <div class="position-relative">
               <img src="${DataService.resolvePath(match.user.avatar) || DataService.resolvePath('assets/images/default-avatar.png')}" class="card-img-top" alt="${match.user.name}" style="height: 200px; object-fit: cover;">
               <div class="match-badge">
                 <span class="badge bg-tindog-primary position-absolute top-0 end-0 m-2">
-                  <i class="bi bi-chat-fill me-1"></i> Message
+                  <i class="bi bi-person-lines-fill me-1"></i> View Profile
                 </span>
               </div>
             </div>

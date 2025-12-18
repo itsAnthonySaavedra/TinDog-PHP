@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  submitBtn.addEventListener("click", () => {
+  submitBtn.addEventListener("click", async () => {
     const selectedReason = reportForm.querySelector(
       'input[name="reportReason"]:checked'
     );
@@ -40,66 +40,104 @@ document.addEventListener("DOMContentLoaded", () => {
         ? otherReasonText.value.trim()
         : selectedReason.value;
     if (!reasonText) {
-      alert("Please describe the issue for 'Other'.");
+      Toast.warning("Please describe the issue for 'Other'.");
       return;
     }
 
-    const allReports = JSON.parse(localStorage.getItem("tindogReports")) || [];
-    const reportingUserId = sessionStorage.getItem("loggedInUserId");
+    const token = sessionStorage.getItem("userToken");
+    if (!token) return;
 
-    const newReport = {
-      id: Date.now(),
-      reportedUserId: reportedUserId,
-      reportedByUserId: reportingUserId,
-      reason: reasonText,
-      date: new Date().toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      }),
-      status: "open",
-    };
-
-    allReports.push(newReport);
-    localStorage.setItem("tindogReports", JSON.stringify(allReports));
-
-    const reportModal = bootstrap.Modal.getInstance(reportModalEl);
-    reportModal.hide();
-
-    reportForm.reset();
+    // Freeze UI
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = "Sending...";
     submitBtn.disabled = true;
-    otherReasonContainer.style.display = "none";
 
-    const blockModalEl = document.getElementById("blockUserModal");
-    const blockUserNameEl = document.getElementById("blockUserName");
-    blockUserNameEl.textContent = reportedUserName;
-    blockModalEl.setAttribute("data-user-to-block", reportedUserId);
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/reports", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          reported_user_id: reportedUserId,
+          reason: reasonText,
+        }),
+      });
 
-    const blockModal = new bootstrap.Modal(blockModalEl);
-    blockModal.show();
+      if (response.ok) {
+        // Success flow
+        const reportModal = bootstrap.Modal.getInstance(reportModalEl);
+        reportModal.hide();
+
+        reportForm.reset();
+        otherReasonContainer.style.display = "none";
+
+        // Prompt to block
+        const blockModalEl = document.getElementById("blockUserModal");
+        if (blockModalEl) {
+          const blockUserNameEl = document.getElementById("blockUserName");
+          blockUserNameEl.textContent = reportedUserName;
+          blockModalEl.setAttribute("data-user-to-block", reportedUserId);
+
+          const blockModal = new bootstrap.Modal(blockModalEl);
+          blockModal.show();
+        } else {
+          Toast.success("Report submitted successfully.");
+        }
+
+      } else {
+        const err = await response.json();
+        Toast.error("Failed to submit report: " + (err.message || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Report Error:", error);
+      Toast.error("An error occurred. Please try again.");
+    } finally {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false; // logic in listener usually keeps it disabled until change, but enable here for retry
+    }
   });
 
   const confirmBlockBtn = document.getElementById("confirmBlockBtn");
-  confirmBlockBtn.addEventListener("click", () => {
-    const blockModalEl = document.getElementById("blockUserModal");
-    const userToBlock = blockModalEl.getAttribute("data-user-to-block");
-    const loggedInUserId = sessionStorage.getItem("loggedInUserId");
+  if (confirmBlockBtn) {
+    confirmBlockBtn.addEventListener("click", async () => {
+      const blockModalEl = document.getElementById("blockUserModal");
+      const userToBlock = blockModalEl.getAttribute("data-user-to-block");
+      const token = sessionStorage.getItem("userToken");
 
-    if (!userToBlock || !loggedInUserId) return;
+      if (!userToBlock || !token) return;
 
-    const allBlocks = JSON.parse(localStorage.getItem("tindogBlocks")) || {};
-    if (!allBlocks[loggedInUserId]) {
-      allBlocks[loggedInUserId] = [];
-    }
-    if (!allBlocks[loggedInUserId].includes(userToBlock)) {
-      allBlocks[loggedInUserId].push(userToBlock);
-    }
-    localStorage.setItem("tindogBlocks", JSON.stringify(allBlocks));
+      confirmBlockBtn.disabled = true;
+      confirmBlockBtn.textContent = "Blocking...";
 
-    const blockModal = bootstrap.Modal.getInstance(blockModalEl);
-    blockModal.hide();
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/users/${userToBlock}/block`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        });
 
-    alert(`${reportedUserName} has been blocked.`);
-    window.location.reload();
-  });
+        if (response.ok) {
+          const blockModal = bootstrap.Modal.getInstance(blockModalEl);
+          blockModal.hide();
+          Toast.success(`${reportedUserName} has been blocked.`);
+          window.location.reload(); // Refresh to remove user from view
+        } else {
+          const err = await response.json();
+          Toast.error("Failed to block user: " + (err.message || "Unknown error"));
+        }
+      } catch (error) {
+        console.error("Block Error:", error);
+        Toast.error("An error occurred while blocking.");
+      } finally {
+        confirmBlockBtn.disabled = false;
+        confirmBlockBtn.textContent = "Yes, Block User";
+      }
+    });
+  }
 });

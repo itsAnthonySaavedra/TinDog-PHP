@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-  <link rel="stylesheet" href="../../assets/css/main.css" />
+  <link rel="stylesheet" href="../../assets/css/main.css?v=2025121503" />
 </head>
 
 <body class="app-body">
@@ -61,12 +61,32 @@
     </div>
   </div>
 
+  <div class="modal fade" id="matchSuccessModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content gradient-background text-white text-center p-4">
+        <div class="modal-body">
+          <h1 class="display-3 fw-bold mb-3"><i class="bi bi-stars"></i></h1>
+          <h2 class="display-5 fw-bold mb-4">It's a Match!</h2>
+          <p class="lead mb-4">You and <strong id="match-pup-name">that pup</strong> liked each other.</p>
+          <div class="d-grid gap-2">
+            <a href="#" id="match-message-btn" class="btn btn-light btn-lg fw-bold text-primary">Send a Message</a>
+            <button type="button" class="btn btn-outline-light btn-lg" data-bs-dismiss="modal">Keep Swiping</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../../assets/js/lib/data-service.js"></script>
   <script src="../../assets/js/utils/component-loader.js"></script>
+  <script src="../../assets/js/utils/toast-service.js"></script>
   <script src="../../assets/js/app/header-handler.js"></script>
   <script src="../../assets/js/app/sidebar-handler.js"></script>
-  <script src="../../assets/js/app/swipe-handler.js"></script>
+  <script src="../../assets/js/app/user-handler.js"></script>
+  <script src="../../assets/js/app/profile-modal.js"></script>
+  <script src="../../assets/js/app/deck-loader.js?v=2025121502"></script>
+  <script src="../../assets/js/app/swipe-logic.js?v=2025121502"></script>
 </body>
 
 </html>

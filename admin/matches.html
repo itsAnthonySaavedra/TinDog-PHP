@@ -1,130 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TinDog - Matches</title>
-    <link
-      rel="icon"
-      type="image/png"
-      href="../assets/images/favicon-transparent.png"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
-    <link rel="stylesheet" href="../assets/css/main.css" />
-  </head>
-  <body>
-    <div data-component="../components/admin-header.html"></div>
-    <div class="container-fluid">
-      <div class="row">
-        <div
-          data-component="../components/admin-sidebar.html"
-          class="col-md-3 col-lg-2 d-md-block p-0"
-        ></div>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
-          <div class="page-header gradient-background">
-            <h1 class="h2">Doggy Matches</h1>
-            <p class="mb-0">Track and manage all the wagging tails 🐾</p>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TinDog - Matches</title>
+  <link rel="icon" type="image/png" href="../assets/images/favicon-transparent.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../assets/css/main.css" />
+</head>
 
-          <div class="row g-4 mb-4">
-            <div class="col-md-6 col-lg-2">
-              <div class="card text-center shadow-sm h-100 kpi-card">
-                <div class="card-body">
-                  <h6>
-                    <i class="bi bi-heart-fill text-danger me-2"></i>Total
-                    Matches
-                  </h6>
-                  <p class="fs-4 fw-bold mb-0" id="total-matches">0</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-2">
-              <div class="card text-center shadow-sm h-100 kpi-card">
-                <div class="card-body">
-                  <h6>
-                    <i class="bi bi-stars text-warning me-2"></i>New This Week
-                  </h6>
-                  <p class="fs-4 fw-bold mb-0" id="new-matches">0</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-2">
-              <div class="card text-center shadow-sm h-100 kpi-card">
-                <div class="card-body">
-                  <h6>
-                    <i class="bi bi-play-circle-fill text-success me-2"></i
-                    >Active Matches
-                  </h6>
-                  <p class="fs-4 fw-bold mb-0" id="active-matches">0</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-2">
-              <div class="card text-center shadow-sm h-100 kpi-card">
-                <div class="card-body">
-                  <h6>
-                    <i class="bi bi-pause-circle-fill text-primary me-2"></i
-                    >Inactive Matches
-                  </h6>
-                  <p class="fs-4 fw-bold mb-0" id="inactive-matches">0</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-2">
-              <div class="card text-center shadow-sm h-100 kpi-card">
-                <div class="card-body">
-                  <h6>
-                    <i class="bi bi-stop-circle-fill text-secondary me-2"></i
-                    >Ended Matches
-                  </h6>
-                  <p class="fs-4 fw-bold mb-0" id="ended-matches">0</p>
-                </div>
+<body>
+  <div data-component="../components/admin-header.html"></div>
+  <div class="container-fluid">
+    <div class="row">
+      <div data-component="../components/admin-sidebar.html" class="col-md-3 col-lg-2 d-md-block p-0"></div>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
+        <div class="page-header gradient-background">
+          <h1 class="h2">Doggy Matches</h1>
+          <p class="mb-0">Track and manage all the wagging tails 🐾</p>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-md-6 col-lg-2">
+            <div class="card text-center shadow-sm h-100 kpi-card">
+              <div class="card-body">
+                <h6>
+                  <i class="bi bi-heart-fill text-danger me-2"></i>Total
+                  Matches
+                </h6>
+                <p class="fs-4 fw-bold mb-0" id="total-matches">0</p>
               </div>
             </div>
           </div>
-
-          <div class="card kpi-card">
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                  <thead>
-                    <tr>
-                      <th>
-                        <i class="bi bi-paw text-primary me-2"></i>Doggy Pair
-                      </th>
-                      <th>
-                        <i class="bi bi-calendar-event me-2"></i>Match Date
-                      </th>
-                      <th><i class="bi bi-stopwatch me-2"></i>Duration</th>
-                      <th><i class="bi bi-chat-dots me-2"></i>Messages</th>
-                      <th>
-                        <i class="bi bi-clock-history me-2"></i>Last Interaction
-                      </th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody id="matches-table-body"></tbody>
-                </table>
+          <div class="col-md-6 col-lg-2">
+            <div class="card text-center shadow-sm h-100 kpi-card">
+              <div class="card-body">
+                <h6>
+                  <i class="bi bi-stars text-warning me-2"></i>New This Week
+                </h6>
+                <p class="fs-4 fw-bold mb-0" id="new-matches">0</p>
               </div>
             </div>
           </div>
-        </main>
-      </div>
+          <div class="col-md-6 col-lg-2">
+            <div class="card text-center shadow-sm h-100 kpi-card">
+              <div class="card-body">
+                <h6>
+                  <i class="bi bi-play-circle-fill text-success me-2"></i>Active Matches
+                </h6>
+                <p class="fs-4 fw-bold mb-0" id="active-matches">0</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-2">
+            <div class="card text-center shadow-sm h-100 kpi-card">
+              <div class="card-body">
+                <h6>
+                  <i class="bi bi-pause-circle-fill text-primary me-2"></i>Inactive Matches
+                </h6>
+                <p class="fs-4 fw-bold mb-0" id="inactive-matches">0</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-2">
+            <div class="card text-center shadow-sm h-100 kpi-card">
+              <div class="card-body">
+                <h6>
+                  <i class="bi bi-stop-circle-fill text-secondary me-2"></i>Ended Matches
+                </h6>
+                <p class="fs-4 fw-bold mb-0" id="ended-matches">0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card kpi-card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>
+                      <i class="bi bi-paw text-primary me-2"></i>Doggy Pair
+                    </th>
+                    <th>
+                      <i class="bi bi-calendar-event me-2"></i>Match Date
+                    </th>
+                    <th><i class="bi bi-stopwatch me-2"></i>Duration</th>
+                    <th><i class="bi bi-chat-dots me-2"></i>Messages</th>
+                    <th>
+                      <i class="bi bi-clock-history me-2"></i>Last Interaction
+                    </th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="matches-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/js/utils/component-loader.js"></script>
-  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/lib/data-service.js"></script>
+  <script src="../assets/js/utils/component-loader.js"></script>
+  <script src="../assets/js/admin/admin-matches.js"></script>
+</body>
+
 </html>

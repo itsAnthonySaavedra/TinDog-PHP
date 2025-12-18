@@ -16,6 +16,10 @@ const UserHandler = {
             if (response.ok) {
                 const result = await response.json();
                 if (result.success) {
+                    // Start Caching for global reuse
+                    sessionStorage.setItem("dashboard_cache", JSON.stringify(result.data));
+                    sessionStorage.setItem("dashboard_cache_time", Date.now());
+
                     UserHandler.updateHeader(result.data.user);
                     // Sidebar is handled by sidebar-handler.js
                 }

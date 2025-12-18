@@ -254,7 +254,7 @@ window.handleDeleteClick = async (userId, userName) => {
 
   const token = sessionStorage.getItem("userToken");
   if (!token) {
-    alert("Unauthorized. Please log in.");
+    Toast.error("Unauthorized. Please log in.");
     return;
   }
 
@@ -272,18 +272,18 @@ window.handleDeleteClick = async (userId, userName) => {
 
     if (!response.ok) {
       if (response.status === 403) {
-        alert("⛔ " + (data.message || "Permission Denied."));
+        Toast.error("⛔ " + (data.message || "Permission Denied."));
       } else {
-        alert("Error: " + (data.message || "Delete failed."));
+        Toast.error("Error: " + (data.message || "Delete failed."));
       }
       return;
     }
 
-    alert("User deleted successfully.");
+    Toast.success("User deleted successfully.");
     loadUsers(); // Refresh table
   } catch (error) {
     console.error("Delete Error:", error);
-    alert("Connection error.");
+    Toast.error("Connection error.");
   }
 };
 
@@ -307,13 +307,13 @@ window.handleReportClick = (userId, userName) => {
   newSubmitBtn.addEventListener("click", async () => {
     const reason = document.getElementById("reportReason").value.trim();
     if (!reason) {
-      alert("Please enter a reason for the report.");
+      Toast.warning("Please enter a reason for the report.");
       return;
     }
 
     const token = sessionStorage.getItem("userToken");
     if (!token) {
-      alert("Unauthorized. Please log in.");
+      Toast.error("Unauthorized. Please log in.");
       return;
     }
 
@@ -334,14 +334,14 @@ window.handleReportClick = (userId, userName) => {
       const result = await response.json();
 
       if (response.ok) {
-        alert("User reported successfully.");
+        Toast.success("User reported successfully.");
         modal.hide();
       } else {
-        alert("Error: " + (result.message || "Failed to report user."));
+        Toast.error("Error: " + (result.message || "Failed to report user."));
       }
     } catch (error) {
       console.error("Report Error:", error);
-      alert("Connection error.");
+      Toast.error("Connection error.");
     }
   });
 };

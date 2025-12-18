@@ -57,12 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
           fetchReports();
           return true;
         } else {
-          alert("Failed to update report status.");
+          Toast.error("Failed to update report status.");
           return false;
         }
       } catch (error) {
         console.error("Error updating report:", error);
-        alert("Connection error.");
+        Toast.error("Connection error.");
         return false;
       }
     };

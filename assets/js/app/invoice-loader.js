@@ -7,9 +7,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    const token = localStorage.getItem("userToken");
+    if (typeof DataService === 'undefined') {
+        console.error("DataService not loaded");
+        // Fallback or just let it fail to console
+        return;
+    }
+
+    const token = DataService.getToken();
     if (!token) {
-        window.location.href = "../auth/login.html";
+        window.location.href = "../auth/index.html";
         return;
     }
 

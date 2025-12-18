@@ -74,14 +74,109 @@ document.addEventListener("DOMContentLoaded", () => {
         : "Administrator";
     };
 
-    profileForm.addEventListener("submit", (e) => {
+    profileForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      alert("Save changes functionality is not yet implemented.");
+
+      const userId = sessionStorage.getItem("loggedInUserId");
+      const token = sessionStorage.getItem("userToken");
+      const saveBtn = profileForm.querySelector("button[type='submit']");
+
+      const payload = {
+        first_name: firstNameInput.value,
+        last_name: lastNameInput.value,
+        email: emailInput.value,
+        display_name: displayNameInput.value
+      };
+
+      try {
+        const originalText = saveBtn.textContent;
+        saveBtn.textContent = "Saving...";
+        saveBtn.disabled = true;
+
+        const response = await fetch(`http://127.0.0.1:8000/api/users/${userId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          Toast.success("Profile updated successfully.");
+          // Update local UI
+          adminUser = data.data || data; // Update local user object
+          loadAdminData(); // Refresh UI
+        } else {
+          Toast.error(data.message || "Failed to update profile.");
+        }
+
+        saveBtn.textContent = originalText;
+        saveBtn.disabled = false;
+
+      } catch (error) {
+        console.error("Profile Save Error:", error);
+        Toast.error("An error occurred while saving.");
+        saveBtn.textContent = "Save Changes";
+        saveBtn.disabled = false;
+      }
     });
 
-    passwordForm.addEventListener("submit", (e) => {
+    passwordForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      alert("Change password functionality is not yet implemented.");
+
+      const currentPassword = document.getElementById("currentPassword").value;
+      const newPassword = document.getElementById("newPassword").value;
+      const confirmNewPassword = document.getElementById("confirmNewPassword").value;
+      const userId = sessionStorage.getItem("loggedInUserId");
+      const token = sessionStorage.getItem("userToken");
+
+      // Client-side validation
+      if (newPassword !== confirmNewPassword) {
+        Toast.error("New passwords do not match.");
+        return;
+      }
+
+      const saveBtn = passwordForm.querySelector("button[type='submit']");
+      const originalText = saveBtn.textContent;
+      saveBtn.textContent = "Updating...";
+      saveBtn.disabled = true;
+
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/users/${userId}/password`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            current_password: currentPassword,
+            password: newPassword,
+            password_confirmation: confirmNewPassword
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          Toast.success("Password changed successfully.");
+          passwordForm.reset();
+          passwordModal.hide();
+        } else {
+          Toast.error(data.message || "Failed to update password.");
+        }
+
+      } catch (error) {
+        console.error("Password Change Error:", error);
+        Toast.error("An error occurred while changing password.");
+      } finally {
+        saveBtn.textContent = originalText;
+        saveBtn.disabled = false;
+      }
     });
 
     loadAdminData();

@@ -1,10 +1,21 @@
 function getBasePath() {
+  // Dynamic Path Detection for Team/GitHub Compatibility
+  // Finds the path segment ending with "TinDog-PHP" regardless of parent folders
   const path = window.location.pathname;
-  const repoName = "/TinDog-PHP/";
-  const repoIndex = path.indexOf(repoName);
-  if (repoIndex > -1) {
-    return path.substring(0, repoIndex + repoName.length);
+
+  // Regex to find ".../TinDog-PHP/" case-insensitive
+  const match = path.match(/^(.*\/TinDog-PHP\/)/i);
+
+  if (match) {
+    return match[1]; // Returns everything up to and including /TinDog-PHP/
   }
+
+  // Fallback for root-level serving or unexpected names
+  // If we are in /auth/, go up one level
+  if (path.includes('/auth/')) {
+    return path.substring(0, path.lastIndexOf('/auth/')) + '/';
+  }
+
   return "/";
 }
 
@@ -35,12 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.success) {
           DataService.saveSession(data);
 
+          const basePath = getBasePath();
           if (data.role === 'admin') {
-            window.location.href = getBasePath() + "admin/dashboard.html";
+            window.location.href = basePath + "admin/dashboard.html";
           } else if (data.status === "new") {
-            window.location.href = getBasePath() + "auth/new-profile.html";
+            window.location.href = basePath + "auth/new-profile.html";
           } else {
-            window.location.href = getBasePath() + "app/dashboard.html";
+            window.location.href = basePath + "app/dashboard.html";
           }
         } else {
           errorAlert.textContent = data.message;
