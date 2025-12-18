@@ -11,18 +11,21 @@ function getBasePath() {
 const handleRegistration = async (event) => {
   event.preventDefault();
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const plan = urlParams.get("plan");
+
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
   const terms = document.getElementById("terms").checked;
 
   if (!terms) {
-    alert("Please agree to the Terms & Conditions.");
+    Toast.warning("Please agree to the Terms & Conditions.");
     return;
   }
 
   if (password !== confirmPassword) {
-    alert("Passwords do not match!");
+    Toast.error("Passwords do not match!");
     return;
   }
 
@@ -69,14 +72,18 @@ const handleRegistration = async (event) => {
     if (loginData.success) {
       sessionStorage.setItem("loggedInUserId", loginData.userId);
       sessionStorage.setItem("userToken", loginData.token);
-      window.location.href = "./new-profile.html";
+      if (plan) {
+        window.location.href = `./new-profile.html?plan=${plan}`;
+      } else {
+        window.location.href = "./new-profile.html";
+      }
     } else {
       throw new Error("Registration successful but auto-login failed.");
     }
 
   } catch (error) {
     console.error("Registration Error:", error);
-    alert(error.message);
+    Toast.error(error.message);
     registerBtn.disabled = false;
     registerBtn.innerHTML = originalBtnText;
   }

@@ -13,18 +13,35 @@
   <style>
     /* Ensure edit button is visible on top of image */
     .edit-cover-btn {
-      z-index: 10;
+      z-index: 1050;
+      /* High z-index to be safe */
       opacity: 0.9;
+      cursor: pointer;
+      pointer-events: auto !important;
     }
 
     .edit-cover-btn:hover {
       opacity: 1;
     }
 
-    /* Ensure avatar is on top */
+    /* Ensure cover photo container has proper stacking */
+    .profile-cover-photo {
+      z-index: 10;
+      /* Higher than before to stay above card background if needed */
+      position: relative;
+    }
+
+    /* Ensure avatar is on top but doesn't block cover button */
     .profile-avatar-wrapper {
       z-index: 20;
       position: relative;
+      pointer-events: none;
+      /* Let clicks pass through the full-width wrapper */
+    }
+
+    /* Restore clicks for the actual avatar and its button */
+    .profile-avatar-wrapper .position-relative {
+      pointer-events: auto;
     }
   </style>
 </head>
@@ -40,9 +57,13 @@
           <div class="profile-cover-photo position-relative">
             <img src="../../assets/images/default-cover.jpg" id="profile-cover" alt="Cover Photo" class="w-100"
               style="height: 175px; object-fit: cover;" />
-            <a href="#" class="edit-cover-btn btn btn-light btn-sm position-absolute bottom-0 end-0 m-3 shadow-sm">
+            <!-- Hidden file input for cover photo -->
+            <input type="file" id="cover-photo-input" accept="image/*" style="display: none;" />
+            <button type="button"
+              class="edit-cover-btn btn btn-light btn-sm position-absolute bottom-0 end-0 m-3 shadow-sm"
+              id="edit-cover-btn">
               <i class="bi bi-camera-fill me-1"></i> Edit Cover
-            </a>
+            </button>
           </div>
           <div class="profile-card">
             <div class="profile-avatar-wrapper text-center" style="margin-top: -75px;">
@@ -50,11 +71,14 @@
                 <img src="../../assets/images/default-avatar.png" id="profile-avatar"
                   class="profile-avatar rounded-circle border border-4 border-white shadow-sm" alt="Profile Avatar"
                   style="width: 150px; height: 150px; object-fit: cover; background: white;" />
-                <a href="#"
+                <!-- Hidden file input for avatar -->
+                <input type="file" id="avatar-input" accept="image/*" style="display: none;" />
+                <button type="button"
                   class="edit-avatar-btn btn btn-light btn-sm position-absolute bottom-0 end-0 mb-2 me-2 rounded-circle shadow-sm"
+                  id="edit-avatar-btn"
                   style="width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;">
                   <i class="bi bi-camera-fill" style="font-size: 0.8rem;"></i>
-                </a>
+                </button>
               </div>
             </div>
 
@@ -148,6 +172,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../../assets/js/lib/data-service.js"></script>
   <script src="../../assets/js/utils/component-loader.js"></script>
+  <script src="../../assets/js/utils/toast-service.js"></script>
   <script src="../../assets/js/app/header-handler.js"></script>
   <script src="../../assets/js/app/sidebar-handler.js"></script>
   <script src="../../assets/js/app/user-handler.js"></script>

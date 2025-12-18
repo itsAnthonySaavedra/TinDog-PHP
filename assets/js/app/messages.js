@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("Messages.js loaded");
   const chatContainerWrapper = document.querySelector(".chat-container-wrapper");
   if (!chatContainerWrapper) return;
 
@@ -25,35 +26,38 @@ document.addEventListener("DOMContentLoaded", () => {
   // Since we don't have a direct way to get ID from token in JS without decoding,
   // we'll rely on the matches API to give us the context or just use local storage for messages keyed by match ID.
   const getLoggedInUserId = () => {
-    // This is a placeholder. In a real app, decode the JWT.
-    // For now, we'll use a session storage value if available, or just 'me'
-    return sessionStorage.getItem("userId") || "me";
+    // Use the standardized key from DataService
+    return sessionStorage.getItem("loggedInUserId");
   };
 
   const loggedInUserId = getLoggedInUserId();
 
-  const getConversationKey = (matchId) => {
-    return `chat_${matchId}`;
-  };
-
+  // Helper to create message HTML
   const createMessageHTML = (message) => {
-    const messageType = message.sender === loggedInUserId ? "sent" : "received";
+    // Loose equality to handle API (int) vs Session (string) mismatch
+    const isMe = message.sender == loggedInUserId;
+    const messageType = isMe ? "sent" : "received";
     return `<div class="message ${messageType}">
               <p>${message.text}</p>
               <span class="message-time">${message.time}</span>
             </div>`;
   };
 
-  const loadConversation = (matchUserId) => {
-    const match = matches.find(m => m.user.id == matchUserId);
+  const loadConversation = async (matchUserId) => {
+    const token = sessionStorage.getItem("userToken");
+    if (!token) return;
+
+    const match = matches.find((m) => m.user.id == matchUserId);
     if (!match) return;
 
     currentMatchUserId = matchUserId;
-    currentConversationKey = getConversationKey(matchUserId);
+    // Removed legacy localStorage key generation
 
     // Update Header
     chatHeaderName.textContent = match.user.name;
-    const avatarSrc = DataService.resolvePath(match.user.avatar) || DataService.resolvePath('assets/images/default-avatar.png');
+    const avatarSrc =
+      DataService.resolvePath(match.user.avatar) ||
+      DataService.resolvePath("assets/images/default-avatar.png");
     chatHeaderAvatar.src = avatarSrc;
 
     if (reportButton) {
@@ -67,44 +71,107 @@ document.addEventListener("DOMContentLoaded", () => {
     chatContent.style.display = "block";
     messageForm.style.display = "flex";
 
-    // Load Messages from Local Storage (Simulation)
-    const allConversations = JSON.parse(localStorage.getItem("tindogConversations")) || {};
-    const conversation = allConversations[currentConversationKey] || { messages: [] };
+    // Clear previous messages
+    chatContent.innerHTML = '<div class="text-center p-3"><span class="spinner-border text-primary"></span></div>';
 
-    chatContent.innerHTML = conversation.messages.map(createMessageHTML).join("");
-    chatContent.scrollTop = chatContent.scrollHeight;
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/messages/${matchUserId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          chatContent.innerHTML = result.data.map(createMessageHTML).join("");
+          chatContent.scrollTop = chatContent.scrollHeight;
+        }
+      } else {
+        chatContent.innerHTML = '<p class="text-center text-danger">Failed to load messages.</p>';
+      }
+    } catch (error) {
+      console.error("Load Messages Error:", error);
+      chatContent.innerHTML = '<p class="text-center text-danger">Error loading conversation.</p>';
+    }
   };
 
-  const handleSendMessage = (event) => {
+  const handleSendMessage = async (event) => {
     event.preventDefault();
+    console.log("Submit intercepted. CurrentMatch:", currentMatchUserId);
+    // alert("Submit intercepted!"); // Uncomment for hard debug
+
+
+    const token = sessionStorage.getItem("userToken");
     const messageText = messageInput.value.trim();
-    if (messageText === "" || !currentConversationKey) return;
 
-    const allConversations = JSON.parse(localStorage.getItem("tindogConversations")) || {};
-    if (!allConversations[currentConversationKey]) {
-      allConversations[currentConversationKey] = { messages: [] };
+    if (messageText === "") { console.log("Empty message"); return; }
+    if (!currentMatchUserId) { console.error("No selected match ID"); return; }
+    if (!token) { console.error("No token"); return; }
+
+    // Optimistic UI update (optional) or loading state? 
+    // Let's just disable input while sending to avoid double-send
+    const submitBtn = messageForm.querySelector("button[type='submit']");
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          receiver_id: currentMatchUserId,
+          message: messageText,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          // result.data contains the new message object
+          const newMessage = result.data;
+          // The backend returns keys: 'sender', 'text', 'time' matching our createMessageHTML needs?
+          // MessageController line 136: 'sender' => $message->sender_id...
+          // createMessageHTML expects: message.sender, message.text, message.time
+          // And compares message.sender === loggedInUserId.
+          // loggedInUserId is set at top of file.
+
+          chatContent.innerHTML += createMessageHTML(newMessage);
+          chatContent.scrollTop = chatContent.scrollHeight;
+          messageInput.value = "";
+        }
+      } else {
+        console.error("Server Responded with Error:", response.status);
+        try {
+          const errorData = await response.json();
+          console.error("ERROR JSON:", errorData);
+          alert("Error: " + (errorData.message || "Unknown Server Error"));
+          if (errorData.trace) console.log(errorData.trace);
+        } catch (e) {
+          alert("Server Error " + response.status + " (Cannot parse JSON)");
+        }
+      }
+    } catch (error) {
+      console.error("Send Message Error:", error);
+      Toast.error("Failed to send message: " + error.message);
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+      messageInput.focus();
     }
-
-    const newMessage = {
-      sender: loggedInUserId,
-      text: messageText,
-      time: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
-
-    allConversations[currentConversationKey].messages.push(newMessage);
-    localStorage.setItem("tindogConversations", JSON.stringify(allConversations));
-
-    chatContent.innerHTML += createMessageHTML(newMessage);
-    chatContent.scrollTop = chatContent.scrollHeight;
-    messageInput.value = "";
   };
 
   const loadMatches = async () => {
     const token = sessionStorage.getItem("userToken");
     if (!token) return;
+
+    // Show Loading State
+    convListBody.innerHTML = `<div class="text-center p-4"><div class="spinner-border text-danger" role="status"></div></div>`;
+    convListBody.style.display = "block";
+    if (convListEmpty) convListEmpty.style.display = "none";
 
     try {
       const response = await fetch("http://127.0.0.1:8000/api/matches", {
@@ -123,6 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } catch (error) {
       console.error("Matches Load Error:", error);
+      convListBody.innerHTML = `<div class="text-center p-4 text-muted"><small>Failed to load matches.<br>Please refresh.</small></div>`;
     }
   };
 
@@ -148,7 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
       li.innerHTML = `
         <div class="avatar-wrapper">
           <img src="${avatarSrc}" alt="${match.user.name}" class="avatar" />
-          <span class="status-indicator online"></span>
         </div>
         <div class="conv-details">
           <div class="conv-name">${match.user.name}</div>
@@ -157,11 +224,13 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
 
       li.addEventListener("click", () => {
+        console.log("Conversation clicked:", match.user.id); // DEBUG
         document.querySelectorAll(".conversation-item").forEach(i => i.classList.remove("active"));
         li.classList.add("active");
         loadConversation(match.user.id);
 
         if (window.innerWidth < 768) {
+          console.log("Mobile view detected, showing chat window."); // DEBUG
           chatContainerWrapper.classList.add("chat-active");
         }
       });

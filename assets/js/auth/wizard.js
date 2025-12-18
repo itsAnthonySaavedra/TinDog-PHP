@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = sessionStorage.getItem("userToken");
 
     if (!userId || !token) {
-      alert("Session expired. Please login again.");
+      Toast.error("Session expired. Please login again.");
       window.location.href = "./index.html";
       return;
     }
@@ -123,15 +123,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await response.json();
 
       if (response.ok && result.success) {
-        window.location.href = getBasePath() + "app/dashboard.html";
+        const urlParams = new URLSearchParams(window.location.search);
+        const plan = urlParams.get("plan");
+
+        if (plan && (plan === 'labrador' || plan === 'mastiff')) {
+          window.location.href = `../auth/checkout.html?plan=${plan}`;
+        } else {
+          window.location.href = getBasePath() + "app/dashboard.html";
+        }
       } else {
-        alert(`Error: ${result.message || "Failed to update profile."}`);
+        Toast.error(`Error: ${result.message || "Failed to update profile."}`);
       }
     } catch (error) {
       console.error("Failed to update profile:", error);
-      alert(
-        "An unexpected error occurred. Please check the console and try again."
-      );
+      Toast.error("An unexpected error occurred. Please check the console.");
     }
   });
 

@@ -21,6 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } else {
         console.error("Failed to fetch dashboard data");
+        if (response.status === 401) {
+          // Token invalid or expired
+          sessionStorage.removeItem("userToken");
+          // Go up one level from /app/ to root, then to /auth/
+          window.location.href = "../auth/index.html";
+        }
       }
     } catch (error) {
       console.error("Dashboard Error:", error);

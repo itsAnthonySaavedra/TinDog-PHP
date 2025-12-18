@@ -1,271 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TinDog - Pricing</title>
-    <link
-      rel="icon"
-      type="image/png"
-      href="../assets/images/favicon-transparent.png"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
-    <link rel="stylesheet" href="../assets/css/main.css" />
-  </head>
-  <body class="d-flex flex-column min-vh-100">
-    <div data-component="../components/header.html"></div>
-    <main class="content-wrapper py-5 bg-light">
-      <div class="container overflow-hidden">
-        <div class="text-center mb-5">
-          <h1>Our Pricing Plans</h1>
-          <p class="lead text-muted">
-            Simple, transparent pricing for every dog's social life. Get started
-            for free!
-          </p>
-          <div class="d-flex justify-content-center align-items-center mt-4">
-            <span class="fw-bold">Monthly</span>
-            <div class="form-check form-switch mx-3">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                id="billing-toggle"
-              />
-            </div>
-            <span class="fw-bold">Annually (Save ~15%)</span>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TinDog - Pricing</title>
+  <link rel="icon" type="image/png" href="../assets/images/favicon-transparent.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../assets/css/main.css" />
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+  <div data-component="../components/header.html"></div>
+  <main class="content-wrapper py-5 bg-light">
+    <div class="container overflow-hidden">
+      <div class="text-center mb-5">
+        <h1>Our Pricing Plans</h1>
+        <p class="lead text-muted">
+          Simple, transparent pricing for every dog's social life. Get started
+          for free!
+        </p>
+        <div class="d-flex justify-content-center align-items-center mt-4">
+          <span class="fw-bold">Monthly</span>
+          <div class="form-check form-switch mx-3">
+            <input class="form-check-input" type="checkbox" role="switch" id="billing-toggle" />
           </div>
+          <span class="fw-bold">Annually (Save ~15%)</span>
         </div>
-        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-          <div class="col">
-            <div
-              class="card pricing-card mb-4 rounded-3 shadow-sm"
-              data-monthly-price="0"
-              data-annual-price="0"
-            >
-              <div class="card-header py-3">
-                <h4 class="my-0 fw-normal">Chihuahua</h4>
-              </div>
-              <div class="card-body">
-                <h1 class="card-title pricing-card-title">
-                  <span class="price">₱0</span
-                  ><small class="text-muted fw-light per-month">/mo</small>
-                </h1>
-                <ul class="list-unstyled mt-3 mb-4">
-                  <li>5 Matches Per Day</li>
-                  <li>10 Messages Per Day</li>
-                  <li>Unlimited App Usage</li>
-                </ul>
-                <a
-                  href="../auth/register.html"
-                  class="w-100 btn btn-lg btn-tindog-outline"
-                  >Sign up for free</a
-                >
-              </div>
+      </div>
+      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="col">
+          <div class="card pricing-card mb-4 rounded-3 shadow-sm" data-monthly-price="0" data-annual-price="0">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Chihuahua</h4>
             </div>
-          </div>
-          <div class="col">
-            <div
-              class="card pricing-card mb-4 rounded-3 shadow-sm popular"
-              data-monthly-price="49"
-              data-annual-price="490"
-            >
-              <div class="popular-badge">Most Popular</div>
-              <div class="card-header py-3">
-                <h4 class="my-0 fw-normal">Labrador</h4>
-              </div>
-              <div class="card-body">
-                <h1 class="card-title pricing-card-title">
-                  <span class="price">₱49</span
-                  ><small class="text-muted fw-light per-month">/mo</small>
-                </h1>
-                <ul class="list-unstyled mt-3 mb-4">
-                  <li>Unlimited Matches</li>
-                  <li>Unlimited Messages</li>
-                  <li>See Who Likes You</li>
-                </ul>
-                <a
-                  href="../auth/checkout.html?plan=labrador"
-                  data-original-href="../auth/checkout.html?plan=labrador"
-                  class="w-100 btn btn-lg btn-tindog-primary checkout-link"
-                  >Get started</a
-                >
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div
-              class="card pricing-card mb-4 rounded-3 shadow-sm"
-              data-monthly-price="99"
-              data-annual-price="990"
-            >
-              <div class="card-header py-3">
-                <h4 class="my-0 fw-normal">Mastiff</h4>
-              </div>
-              <div class="card-body">
-                <h1 class="card-title pricing-card-title">
-                  <span class="price">₱99</span
-                  ><small class="text-muted fw-light per-month">/mo</small>
-                </h1>
-                <ul class="list-unstyled mt-3 mb-4">
-                  <li>All Labrador Features, Plus:</li>
-                  <li>Advanced Filters</li>
-                  <li>Priority Listing</li>
-                </ul>
-                <a
-                  href="../auth/checkout.html?plan=mastiff"
-                  data-original-href="../auth/checkout.html?plan=mastiff"
-                  class="w-100 btn btn-lg btn-tindog-outline checkout-link"
-                  >Choose Mastiff</a
-                >
-              </div>
+            <div class="card-body pricing-card-body-content">
+              <h1 class="card-title pricing-card-title">
+                <span class="price">₱0</span><small class="text-muted fw-light per-month">/mo</small>
+              </h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>5 Matches Per Day</li>
+                <li>10 Messages Per Day</li>
+                <li>Unlimited App Usage</li>
+              </ul>
+              <a href="../auth/register.html?plan=chihuahua" class="w-100 btn btn-lg btn-tindog-outline">Sign up for
+                free</a>
             </div>
           </div>
         </div>
-        <h2 class="display-6 text-center mb-4 mt-5">Compare Features</h2>
-        <div class="table-responsive">
-          <table class="table text-center table-striped align-middle">
-            <thead>
-              <tr>
-                <th style="width: 34%"></th>
-                <th style="width: 22%">
-                  <h5>Chihuahua</h5>
-                  <small class="text-muted">Free</small>
-                </th>
-                <th style="width: 22%">
-                  <h5>Labrador</h5>
-                  <small class="text-muted">₱49/mo</small>
-                </th>
-                <th style="width: 22%">
-                  <h5>Mastiff</h5>
-                  <small class="text-muted">₱99/mo</small>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row" class="text-start ps-3">Matches Per Day</th>
-                <td>5</td>
-                <td><i class="bi bi-infinity fs-4 text-success"></i></td>
-                <td><i class="bi bi-infinity fs-4 text-success"></i></td>
-              </tr>
-              <tr>
-                <th scope="row" class="text-start ps-3">Messages Per Day</th>
-                <td>10</td>
-                <td><i class="bi bi-infinity fs-4 text-success"></i></td>
-                <td><i class="bi bi-infinity fs-4 text-success"></i></td>
-              </tr>
-              <tr>
-                <th scope="row" class="text-start ps-3">See Who Likes You</th>
-                <td><i class="bi bi-x-lg fs-4 text-muted"></i></td>
-                <td><i class="bi bi-check-lg fs-4 text-success"></i></td>
-                <td><i class="bi bi-check-lg fs-4 text-success"></i></td>
-              </tr>
-              <tr>
-                <th scope="row" class="text-start ps-3">Advanced Filters</th>
-                <td><i class="bi bi-x-lg fs-4 text-muted"></i></td>
-                <td><i class="bi bi-x-lg fs-4 text-muted"></i></td>
-                <td><i class="bi bi-check-lg fs-4 text-success"></i></td>
-              </tr>
-              <tr>
-                <th scope="row" class="text-start ps-3">Priority Listing</th>
-                <td><i class="bi bi-x-lg fs-4 text-muted"></i></td>
-                <td><i class="bi bi-x-lg fs-4 text-muted"></i></td>
-                <td><i class="bi bi-check-lg fs-4 text-success"></i></td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="col">
+          <div class="card pricing-card mb-4 rounded-3 shadow-sm popular" data-monthly-price="49"
+            data-annual-price="490">
+            <div class="popular-badge">Most Popular</div>
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Labrador</h4>
+            </div>
+            <div class="card-body pricing-card-body-content">
+              <h1 class="card-title pricing-card-title">
+                <span class="price">₱49</span><small class="text-muted fw-light per-month">/mo</small>
+              </h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>Unlimited Matches</li>
+                <li>Unlimited Messages</li>
+                <li>See Who Likes You</li>
+              </ul>
+              <a href="../auth/register.html?plan=labrador" data-original-href="../auth/register.html?plan=labrador"
+                class="w-100 btn btn-lg btn-tindog-primary checkout-link">Get started</a>
+            </div>
+          </div>
         </div>
-        <div class="mt-5">
-          <h2 class="text-center mb-4">Pricing Questions</h2>
-          <div
-            class="accordion mx-auto"
-            id="pricingFaq"
-            style="max-width: 700px"
-          >
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#faq1"
-                >
-                  Can I change my plan later?
-                </button>
-              </h2>
-              <div
-                id="faq1"
-                class="accordion-collapse collapse"
-                data-bs-parent="#pricingFaq"
-              >
-                <div class="accordion-body">
-                  Yes! You can upgrade or downgrade your plan at any time from
-                  your account settings.
-                </div>
+        <div class="col">
+          <div class="card pricing-card mb-4 rounded-3 shadow-sm" data-monthly-price="99" data-annual-price="990">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Mastiff</h4>
+            </div>
+            <div class="card-body pricing-card-body-content">
+              <h1 class="card-title pricing-card-title">
+                <span class="price">₱99</span><small class="text-muted fw-light per-month">/mo</small>
+              </h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>All Labrador Features, Plus:</li>
+                <li>Advanced Filters</li>
+                <li>Priority Listing</li>
+              </ul>
+              <a href="../auth/register.html?plan=mastiff" data-original-href="../auth/register.html?plan=mastiff"
+                class="w-100 btn btn-lg btn-tindog-outline checkout-link">Choose Mastiff</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="display-6 text-center mb-4 mt-5">Compare Features</h2>
+      <div class="table-responsive">
+        <table class="table text-center table-striped align-middle">
+          <thead>
+            <tr>
+              <th style="width: 34%"></th>
+              <th style="width: 22%">
+                <h5>Chihuahua</h5>
+                <small class="text-muted">Free</small>
+              </th>
+              <th style="width: 22%">
+                <h5>Labrador</h5>
+                <small class="text-muted">₱49/mo</small>
+              </th>
+              <th style="width: 22%">
+                <h5>Mastiff</h5>
+                <small class="text-muted">₱99/mo</small>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row" class="text-start ps-3">Matches Per Day</th>
+              <td>5</td>
+              <td><i class="bi bi-infinity fs-4 text-success"></i></td>
+              <td><i class="bi bi-infinity fs-4 text-success"></i></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start ps-3">Messages Per Day</th>
+              <td>10</td>
+              <td><i class="bi bi-infinity fs-4 text-success"></i></td>
+              <td><i class="bi bi-infinity fs-4 text-success"></i></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start ps-3">See Who Likes You</th>
+              <td><i class="bi bi-x-lg fs-4 text-muted"></i></td>
+              <td><i class="bi bi-check-lg fs-4 text-success"></i></td>
+              <td><i class="bi bi-check-lg fs-4 text-success"></i></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start ps-3">Advanced Filters</th>
+              <td><i class="bi bi-x-lg fs-4 text-muted"></i></td>
+              <td><i class="bi bi-x-lg fs-4 text-muted"></i></td>
+              <td><i class="bi bi-check-lg fs-4 text-success"></i></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start ps-3">Priority Listing</th>
+              <td><i class="bi bi-x-lg fs-4 text-muted"></i></td>
+              <td><i class="bi bi-x-lg fs-4 text-muted"></i></td>
+              <td><i class="bi bi-check-lg fs-4 text-success"></i></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-5">
+        <h2 class="text-center mb-4">Pricing Questions</h2>
+        <div class="accordion mx-auto" id="pricingFaq" style="max-width: 700px">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                Can I change my plan later?
+              </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+              <div class="accordion-body">
+                Yes! You can upgrade or downgrade your plan at any time from
+                your account settings.
               </div>
             </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#faq2"
-                >
-                  What payment methods do you accept?
-                </button>
-              </h2>
-              <div
-                id="faq2"
-                class="accordion-collapse collapse"
-                data-bs-parent="#pricingFaq"
-              >
-                <div class="accordion-body">
-                  We accept all major credit cards, as well as GCash and Maya
-                  for payments in the Philippines.
-                </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                What payment methods do you accept?
+              </button>
+            </h2>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+              <div class="accordion-body">
+                We accept all major credit cards, as well as GCash and Maya
+                for payments in the Philippines.
               </div>
             </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#faq3"
-                >
-                  Is there a free trial for paid plans?
-                </button>
-              </h2>
-              <div
-                id="faq3"
-                class="accordion-collapse collapse"
-                data-bs-parent="#pricingFaq"
-              >
-                <div class="accordion-body">
-                  Our Chihuahua plan is always free! We do not currently offer a
-                  free trial for the Labrador or Mastiff plans.
-                </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                Is there a free trial for paid plans?
+              </button>
+            </h2>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+              <div class="accordion-body">
+                Our Chihuahua plan is always free! We do not currently offer a
+                free trial for the Labrador or Mastiff plans.
               </div>
             </div>
           </div>
         </div>
       </div>
-    </main>
-    <div data-component="../components/footer.html"></div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/js/utils/component-loader.js"></script>
-    <script src="../assets/js/public/pricing-toggle.js"></script>
-  </body>
+    </div>
+  </main>
+  <div data-component="../components/footer.html"></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/utils/component-loader.js"></script>
+  <script src="../assets/js/lib/data-service.js"></script>
+  <script src="../assets/js/public/pricing-toggle.js"></script>
+  <script src="../assets/js/utils/toast-service.js"></script>
+  <script src="../assets/js/public/pricing-plan-check.js"></script>
+</body>
+
 </html>

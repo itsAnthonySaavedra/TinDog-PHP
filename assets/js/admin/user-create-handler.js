@@ -10,11 +10,28 @@ function getBasePath() {
 
 document.addEventListener("DOMContentLoaded", () => {
   const createUserForm = document.getElementById("create-user-form");
+  const roleSelect = document.getElementById("userRole");
+  const standardUserFields = document.getElementById("standard-user-fields");
+
+  // Toggle Visibility Logic (Moved from deleted user-create.js)
+  const toggleUserFields = () => {
+    if (roleSelect && standardUserFields) {
+      if (roleSelect.value === "user") {
+        standardUserFields.style.display = "block";
+      } else {
+        standardUserFields.style.display = "none";
+      }
+    }
+  };
+
+  if (roleSelect) {
+    roleSelect.addEventListener("change", toggleUserFields);
+    toggleUserFields(); // Init
+  }
 
   if (createUserForm) {
     // Permission Check: Only Master Admin can create Admins
     const currentAdminIsMaster = sessionStorage.getItem("isMasterAdmin") === "true";
-    const roleSelect = document.getElementById("userRole");
 
     if (roleSelect && !currentAdminIsMaster) {
       // Remove "Administrator" option
@@ -68,16 +85,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const result = await response.json();
 
         if (response.ok && result.success) {
-          window.location.href = `${getBasePath()}admin/users/record.html?user=${result.userId
-            }`;
+          Toast.success("User created successfully. Redirecting...");
+          setTimeout(() => {
+            window.location.href = `${getBasePath()}admin/users/record.html?user=${result.userId}`;
+          }, 1500);
         } else {
-          alert(`Error: ${result.message}`);
+          Toast.error(`Error: ${result.message}`);
         }
       } catch (error) {
         console.error("Failed to create user:", error);
-        alert(
-          "An unexpected error occurred. Please check the console and try again."
-        );
+        Toast.error("An unexpected error occurred. Please check the console.");
       }
     });
   }

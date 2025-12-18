@@ -1,4 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Input Formatting Logic
+  const setupInputFormatting = () => {
+    const cardInput = document.getElementById('cardNumber');
+    const cvcInput = document.getElementById('cvc');
+
+    if (cardInput) {
+      cardInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '').substring(0, 16);
+        let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+        e.target.value = formattedValue;
+      });
+    }
+
+    if (cvcInput) {
+      cvcInput.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3);
+      });
+    }
+  };
+
+  setupInputFormatting();
   const planDetails = {
     labrador: {
       name: "Labrador Plan",
@@ -74,8 +95,67 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const handleCheckout = () => {
-    window.location.href = "./new-profile.html";
+  const handleCheckout = async () => {
+    // 1. Get Token
+    const token = sessionStorage.getItem("userToken");
+    if (!token) {
+      Toast.error("Session expired. Please log in again.");
+      window.location.href = "../auth/index.html";
+      return;
+    }
+
+    // 2. Identify the selected plan parameters
+    const selectedPlanKey = getUrlParameter("plan") || "labrador";
+    const selectedBilling = getUrlParameter("billing") || "monthly";
+
+    const submitBtn = document.querySelector("#checkout-form button[type='submit']");
+    const originalBtnText = submitBtn ? submitBtn.textContent : "Confirm Payment";
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
+    }
+
+    try {
+      // 3. Call API
+      const response = await fetch("http://127.0.0.1:8000/api/subscription/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          plan: selectedPlanKey,
+          billing_cycle: selectedBilling,
+          billing: selectedBilling, // Fix: Sending both to satisfy backend validation "billing field is required"
+          payment_method: "credit_card" // Mock payment method
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // 4. Update Session Storage (Immediate Effect)
+        sessionStorage.setItem("userPlan", selectedPlanKey);
+
+        const successMsg = result.message || "Payment successful! Your plan has been upgraded.";
+        Toast.success(successMsg);
+
+        // Wait a small moment for toast then redirect
+        setTimeout(() => {
+          window.location.href = "../app/dashboard.html";
+        }, 1500);
+      } else {
+        throw new Error(result.message || "Subscription failed.");
+      }
+    } catch (error) {
+      console.error("Checkout Error:", error);
+      Toast.error(error.message || "An error occurred during checkout.");
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
+    }
   };
 
   initializeCheckoutPage();

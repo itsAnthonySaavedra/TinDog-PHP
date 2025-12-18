@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = sessionStorage.getItem("userToken");
 
   if (!userId) {
-    alert("No user ID provided.");
+    Toast.error("No user ID provided.");
     window.location.href = "./index.html";
     return;
   }
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } catch (error) {
       console.error("Load Error:", error);
-      alert("Could not load user details. You might not have permission.");
+      Toast.error("Could not load user details. You might not have permission.");
       window.location.href = "./index.html";
     }
   };
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error(data.message || "Update failed.");
       }
 
-      alert("User updated successfully!");
+      Toast.success("User updated successfully!");
       window.location.href = "./index.html";
     } catch (error) {
       console.error("Update Error:", error);

@@ -28,14 +28,14 @@
               <div class="card-header">Current Plan</div>
               <div class="card-body">
                 <h3 class="fw-bold display-6" id="billing-plan-name">
-                  Labrador Plan
+                  Loading...
                 </h3>
                 <h2 class="card-title pricing-card-title">
-                  <span id="billing-plan-price">₱149</span><small class="text-muted fw-light"
+                  <span id="billing-plan-price">...</span><small class="text-muted fw-light"
                     id="billing-plan-cycle">/mo</small>
                 </h2>
                 <p class="text-muted" id="billing-renewal-date">
-                  Your plan renews on October 23, 2025.
+                  Checking renewal status...
                 </p>
                 <a href="../public/pricing.html" class="btn btn-tindog-primary">Change Plan</a>
                 <a href="#" class="btn btn-outline-danger">Cancel Plan</a>
@@ -49,11 +49,11 @@
                 <div class="d-flex align-items-center mb-3">
                   <i class="bi bi-credit-card-2-front-fill fs-1 me-3"></i>
                   <div>
-                    <h6 class="mb-0">Visa ending in 4242</h6>
-                    <small class="text-muted">Expires 12/2028</small>
+                    <h6 class="mb-0" id="payment-method-text">Payment Method</h6>
+                    <small class="text-muted" id="payment-method-desc">Payment managed via Stripe</small>
                   </div>
                 </div>
-                <button class="btn btn-sm btn-outline-secondary">
+                <button class="btn btn-sm btn-outline-secondary" id="btn-update-payment">
                   Update Payment Method
                 </button>
               </div>
@@ -74,42 +74,10 @@
                         <th class="text-end"></th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="billing-history-body">
+                      <!-- Rows loaded via JS -->
                       <tr>
-                        <td>Sep 12, 2025</td>
-                        <td>Labrador Plan - Monthly Subscription</td>
-                        <td class="text-end">₱149.00</td>
-                        <td class="text-end">
-                          <span class="badge text-bg-success">Paid</span>
-                        </td>
-                        <td class="text-end">
-                          <a href="#" class="btn btn-sm btn-outline-secondary"><i
-                              class="bi bi-download me-1"></i>Invoice</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Aug 12, 2025</td>
-                        <td>Labrador Plan - Monthly Subscription</td>
-                        <td class="text-end">₱149.00</td>
-                        <td class="text-end">
-                          <span class="badge text-bg-success">Paid</span>
-                        </td>
-                        <td class="text-end">
-                          <a href="#" class="btn btn-sm btn-outline-secondary"><i
-                              class="bi bi-download me-1"></i>Invoice</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Jul 12, 2025</td>
-                        <td>Labrador Plan - Monthly Subscription</td>
-                        <td class="text-end">₱149.00</td>
-                        <td class="text-end">
-                          <span class="badge text-bg-success">Paid</span>
-                        </td>
-                        <td class="text-end">
-                          <a href="#" class="btn btn-sm btn-outline-secondary"><i
-                              class="bi bi-download me-1"></i>Invoice</a>
-                        </td>
+                        <td colspan="5" class="text-center text-muted py-4">Loading billing history...</td>
                       </tr>
                     </tbody>
                   </table>
@@ -121,7 +89,29 @@
       </main>
     </div>
   </div>
+  <!-- Cancel Confirmation Modal -->
+  <div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header border-0 bg-danger text-white">
+          <h5 class="modal-title fs-5 fw-bold">Cancel Subscription?</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4 text-center">
+          <i class="bi bi-exclamation-circle text-danger display-1 mb-3"></i>
+          <p class="fs-5">Are you sure you want to cancel your plan?</p>
+          <p class="text-muted small">You will lose access to premium features immediately.</p>
+        </div>
+        <div class="modal-footer border-0 justify-content-center pb-4">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Keep Plan</button>
+          <button type="button" class="btn btn-danger px-4" id="confirm-cancel-btn">Yes, Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/utils/toast-service.js"></script>
   <script src="../assets/js/lib/data-service.js"></script>
   <script src="../assets/js/utils/component-loader.js"></script>
   <script src="../assets/js/app/header-handler.js"></script>
